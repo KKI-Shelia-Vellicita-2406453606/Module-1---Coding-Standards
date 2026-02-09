@@ -21,7 +21,6 @@ public class ProductRepository {
     }
 }
 
-// Add these methods inside your ProductRepository class
 public Product findById(String id) {
     for (Product product : productData) {
         if (product.getProductId().equals(id)) {
