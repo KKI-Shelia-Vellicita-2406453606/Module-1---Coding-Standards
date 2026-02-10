@@ -46,7 +46,7 @@ public class ProductController {
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product) {
         service.update(product);
-        return "redirect:list";
+        return "redirect:/product/list"; // Absolute path redirect
     }
 
 }
