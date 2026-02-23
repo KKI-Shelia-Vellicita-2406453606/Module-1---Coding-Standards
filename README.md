@@ -27,3 +27,5 @@ Regarding Secure Coding, I utilized Spring's @PathVariable and @ModelAttribute t
 2. Yes, the current implementation meets the definitions of Continuous Integration and Continuous Deployment.
 - Continuous Integration (CI): The setup successfully implements CI because every time a push or pull request is made, the GitHub Actions workflows defined in ci.yml and pmd.yml are triggered automatically. This process compiles the Java code, runs the entire test suite using Gradle, and performs static code analysis to verify code quality before any merge occurs.
 - Continuous Deployment (CD): The implementation qualifies as CD because the process of releasing the software to production is fully automated through Heroku. By connecting the GitHub repository to Heroku, any changes that pass the CI pipeline and are merged into the module-2-exercise branch are automatically detected, built (using the buildpacks), and deployed to the live environment without requiring manual server configuration or file uploads.
+
+Deployment link: https://shelia-eshop-074875ae89f3.herokuapp.com/
