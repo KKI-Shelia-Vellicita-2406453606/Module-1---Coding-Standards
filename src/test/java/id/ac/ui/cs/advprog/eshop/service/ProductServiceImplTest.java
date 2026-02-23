@@ -36,4 +36,47 @@ class ProductServiceImplTest {
         assertEquals(product.getProductName(), savedProduct.getProductName());
         assertEquals(product.getProductQuantity(), savedProduct.getProductQuantity());
     }
+
+    @Test
+    void testFindById() {
+        Product product = new Product();
+        product.setProductId("find-id-123");
+        product.setProductName("Find Me");
+        product.setProductQuantity(5);
+
+        service.create(product);
+
+        Product found = service.findById("find-id-123");
+        assertNotNull(found);
+        assertEquals(product.getProductId(), found.getProductId());
+        assertEquals(product.getProductName(), found.getProductName());
+    }
+
+    @Test
+    void testUpdateAndDelete() {
+        Product product = new Product();
+        product.setProductId("upd-id-123");
+        product.setProductName("Before Update");
+        product.setProductQuantity(1);
+
+        service.create(product);
+
+        Product updated = new Product();
+        updated.setProductId("upd-id-123");
+        updated.setProductName("After Update");
+        updated.setProductQuantity(99);
+
+        service.update(updated);
+
+        Product saved = productRepository.findById("upd-id-123");
+        assertNotNull(saved);
+        assertEquals("After Update", saved.getProductName());
+        assertEquals(99, saved.getProductQuantity());
+
+        service.delete("upd-id-123");
+        List<Product> productList = service.findAll();
+        // after deletion the list should not contain the deleted item
+        boolean present = productList.stream().anyMatch(p -> "upd-id-123".equals(p.getProductId()));
+        assertFalse(present);
+    }
 }

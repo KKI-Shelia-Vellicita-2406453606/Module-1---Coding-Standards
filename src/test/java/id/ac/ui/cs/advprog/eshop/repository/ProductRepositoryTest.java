@@ -122,4 +122,31 @@ class ProductRepositoryTest {
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
     }
+
+    @Test
+    void testCreateGeneratesIdWhenNull() {
+        Product product = new Product();
+        product.setProductName("NoIdProduct");
+        product.setProductQuantity(5);
+
+        Product created = productRepository.create(product);
+        assertNotNull(created.getProductId());
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertTrue(productIterator.hasNext());
+        Product saved = productIterator.next();
+        assertEquals(created.getProductId(), saved.getProductId());
+    }
+
+    @Test
+    void testFindByIdNotFoundReturnsNull() {
+        // ensure repository is empty
+        Iterator<Product> it = productRepository.findAll();
+        while (it.hasNext()) {
+            productRepository.delete(it.next().getProductId());
+        }
+
+        Product result = productRepository.findById("non-existent-id-xyz");
+        assertNull(result);
+    }
 }
