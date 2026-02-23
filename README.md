@@ -20,7 +20,7 @@ Regarding Secure Coding, I utilized Spring's @PathVariable and @ModelAttribute t
 
    To improve this and maintain high code quality, several refactoring techniques could be applied. First, common setup logic, such as the baseUrl assignment and the @LocalServerPort declaration, should be moved into a Base Test Class that other functional suites can extend. Additionally, implementing a Page Object Model (POM) would allow us to encapsulate page-specific interactions, like finding a table row or clicking a button, within dedicated classes. This separation of concerns makes the test scripts more readable and ensures that any change in the HTML structure only needs to be updated in one place.
 
-## Reflection 2
+## Reflection 3
 
 1. During the exercise, I fixed several code quality issues identified by the PMD code analysis tool. The most significant issue was related to naming conventions and access modifiers in JUnit 5 tests. PMD flagged that test classes and methods should be package-private rather than public, as JUnit 5 does not require the public modifier. My strategy for fixing this was to refactor the test code in ProductTest.java and ProductRepositoryTest.java by removing the public keyword from the class definitions and test methods. Additionally, I addressed issues regarding unused imports and unnecessary variables by reviewing the code analysis report in the GitHub Actions logs and removing the redundant code. This strategy ensured that the codebase remained clean, maintainable, and compliant with the project's defined coding standards.
 
