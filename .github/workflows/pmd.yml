@@ -1,0 +1,22 @@
+name: PMD Code Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pmd-analysis:
+    name: Run PMD
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Run PMD
+        run: ./gradlew pmdMain

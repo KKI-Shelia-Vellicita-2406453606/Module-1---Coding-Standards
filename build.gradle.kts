@@ -3,6 +3,7 @@ plugins {
     jacoco
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.4"
+    pmd
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -14,6 +15,7 @@ java {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
+
 
 configurations{
     compileOnly {
@@ -75,4 +77,10 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+}
+
+pmd {
+    isConsoleOutput = true
+    toolVersion = "7.0.0-rc4"
+    rulesMinimumPriority.set(5)
 }

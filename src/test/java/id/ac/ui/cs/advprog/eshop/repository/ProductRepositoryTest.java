@@ -1,7 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,18 +13,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
 
+    private static final String PRODUCT_ID = "eb558e9f-1c39-460e-8860-71af6af63bd6";
+    private static final String PRODUCT_NAME_BAMBANG = "Sampo Cap Bambang";
+
     @InjectMocks
     ProductRepository productRepository;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void testCreateAndFind() {
         Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product.setProductName("Sampo Cap Bambang");
+        product.setProductId(PRODUCT_ID);
+        product.setProductName(PRODUCT_NAME_BAMBANG);
         product.setProductQuantity(100);
         productRepository.create(product);
 
@@ -46,8 +44,8 @@ class ProductRepositoryTest {
     @Test
     void testFindAllIfMoreThanOneProduct() {
         Product product1 = new Product();
-        product1.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product1.setProductName("Sampo Cap Bambang");
+        product1.setProductId(PRODUCT_ID);
+        product1.setProductName(PRODUCT_NAME_BAMBANG);
         product1.setProductQuantity(100);
         productRepository.create(product1);
 
@@ -69,13 +67,13 @@ class ProductRepositoryTest {
     @Test
     void testEditProductPositive() {
         Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        product.setProductName("Sampo Cap Bambang");
+        product.setProductId(PRODUCT_ID);
+        product.setProductName(PRODUCT_NAME_BAMBANG);
         product.setProductQuantity(100);
         productRepository.create(product);
 
         Product updatedProduct = new Product();
-        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        updatedProduct.setProductId(PRODUCT_ID);
         updatedProduct.setProductName("Sampo Cap Bango");
         updatedProduct.setProductQuantity(200);
         productRepository.update(updatedProduct);
@@ -105,10 +103,10 @@ class ProductRepositoryTest {
     @Test
     void testDeleteProductPositive() {
         Product product = new Product();
-        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductId(PRODUCT_ID);
         productRepository.create(product);
 
-        productRepository.delete("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        productRepository.delete(PRODUCT_ID);
         Iterator<Product> productIterator = productRepository.findAll();
         assertFalse(productIterator.hasNext());
     }
@@ -123,5 +121,32 @@ class ProductRepositoryTest {
 
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
+    }
+
+    @Test
+    void testCreateGeneratesIdWhenNull() {
+        Product product = new Product();
+        product.setProductName("NoIdProduct");
+        product.setProductQuantity(5);
+
+        Product created = productRepository.create(product);
+        assertNotNull(created.getProductId());
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertTrue(productIterator.hasNext());
+        Product saved = productIterator.next();
+        assertEquals(created.getProductId(), saved.getProductId());
+    }
+
+    @Test
+    void testFindByIdNotFoundReturnsNull() {
+        // ensure repository is empty
+        Iterator<Product> it = productRepository.findAll();
+        while (it.hasNext()) {
+            productRepository.delete(it.next().getProductId());
+        }
+
+        Product result = productRepository.findById("non-existent-id-xyz");
+        assertNull(result);
     }
 }
