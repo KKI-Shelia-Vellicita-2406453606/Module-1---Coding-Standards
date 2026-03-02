@@ -29,3 +29,22 @@ Regarding Secure Coding, I utilized Spring's @PathVariable and @ModelAttribute t
 - Continuous Deployment (CD): The implementation qualifies as CD because the process of releasing the software to production is fully automated through Heroku. By connecting the GitHub repository to Heroku, any changes that pass the CI pipeline and are merged into the main branch (that was merged from module-2-exercise branch) are automatically detected, built (using the buildpacks), and deployed to the live environment without requiring manual server configuration or file uploads.
 
 Deployment link: https://shelia-eshop-074875ae89f3.herokuapp.com/
+
+## Reflection 4
+
+1. Explain what principles you apply to your project.
+
+      In this project, I applied all five SOLID principles to improve the code's structure and maintainability. 
+- For the Single Responsibility Principle (SRP), I separated the CarController from the ProductController file into its own dedicated class, ensuring each controller is only responsible for handling HTTP requests for its specific entity. 
+- For the Open-Closed Principle (OCP), I refactored the update method in the CarRepository to replace the entire Car object within the list rather than manually mapping individual attributes, keeping the method closed to modification if the Car model gets new fields.
+- To resolve the Liskov Substitution Principle (LSP), I removed the extends ProductController inheritance from CarController, as a car controller does not truly fulfill an "IS-A" relationship with a product controller.
+- The Interface Segregation Principle (ISP) was already met, as the CarService interface is lean and only dictates the methods clients actually use.
+- Finally, I applied the Dependency Inversion Principle (DIP) in the CarController by injecting the CarService interface rather than the concrete CarServiceImpl class.
+
+2. Explain the advantages of applying SOLID principles to your project with examples.
+
+      Applying SOLID principles makes the application significantly more flexible, scalable, and easier to test. For instance, by applying OCP to the CarRepository, if we decide to add new properties like carPrice or carEngineType to the model in the future, the repository's update logic automatically handles the new object structure without requiring us to write new setter methods. Applying DIP in the controller layer brings a massive advantage to testing because CarController depends on an abstraction (CarService), we can easily inject a mock service during unit tests without needing to boot up a real database or repository. Furthermore, by adhering to SRP and keeping our controllers isolated, multiple developers can work on the Product and Car features simultaneously without running into constant merge conflicts in a single bloated file.
+
+3. Explain the disadvantages of not applying SOLID principles to your project with examples.
+
+      Conversely, failing to apply SOLID principles creates a rigid, fragile codebase where small changes often trigger cascading bugs. For instance, before applying LSP and SRP, CarController extended ProductController. This false inheritance meant the car controller absorbed dependencies it didn't need, which can cause severe AmbiguousMappingException errors in Spring Boot if routes overlap, ultimately crashing the application. If we had ignored OCP in the repository, adding a single new attribute to the Car model would require us to manually hunt down and update the setter methods in the update logic; forgetting even one line would lead to silent data loss when a user tries to edit a car. Lastly, without DIP, tightly coupling the CarController directly to CarServiceImpl means that if we ever wanted to swap out our in-memory list for a real database implementation, we would be forced to modify the controller code as well, violating the separation of concerns.
