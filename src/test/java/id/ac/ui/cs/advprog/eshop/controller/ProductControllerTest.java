@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.controller;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.service.ProductService;
+import id.ac.ui.cs.advprog.eshop.service.CarServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,6 +32,9 @@ class ProductControllerTest {
     @MockBean
     private ProductService service;
 
+    @MockBean
+    private CarServiceImpl carService;
+
     @Test
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
@@ -42,10 +46,10 @@ class ProductControllerTest {
     @Test
     void testCreateProductPost() throws Exception {
         mockMvc.perform(post("/product/create")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("productId", "id-1")
-                .param("productName", "Name")
-                .param("productQuantity", "10"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("productId", "id-1")
+                        .param("productName", "Name")
+                        .param("productQuantity", "10"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("list"));
 
@@ -81,10 +85,10 @@ class ProductControllerTest {
                 .andExpect(model().attributeExists("product"));
 
         mockMvc.perform(post("/product/edit")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("productId", "edit-1")
-                .param("productName", "Edited")
-                .param("productQuantity", "20"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("productId", "edit-1")
+                        .param("productName", "Edited")
+                        .param("productQuantity", "20"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
 
